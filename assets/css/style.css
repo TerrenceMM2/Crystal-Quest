@@ -1,0 +1,90 @@
+@import url("fonts.css");
+
+body {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 2rem;
+    background-color: #222;
+    color: #FFF;
+}
+
+h1 {
+    font-weight: 900;
+}
+
+.container {
+    height: 100vh;
+    margin: auto;
+    padding: 15% 0;
+}
+
+.button {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    font-family: 'Raleway', sans-serif;
+}
+
+.crystal {
+    max-width: 50%; 
+}
+
+#crystal1 {
+    animation-delay: .5s;
+}
+
+#crystal2 {
+    animation-delay: 1s;
+}
+
+#crystal3 {
+    animation-delay: 1.5s;
+}
+
+#crystal4 {
+    animation-delay: 2s;
+}
+
+.flash {
+    animation-delay: 0s !important;
+}
+
+#reset-game, .target, #stats, .credits {
+    display: none;
+}
+
+#start-game {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+#reset-game {
+    position: absolute;
+    right: 0;
+    bottom: 6rem;
+}
+
+#crystal-container {
+    display: none;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    justify-content: space-evenly;
+}
+
+.info {
+    position: absolute;
+    margin-bottom: 1rem;
+    bottom: 0;
+}
+
+a, a:hover {
+    color: #444;
+    text-decoration: none;
+}
+
+.credits {
+    color: #444;
+    display: inline-block;
+    font-size: 1.3rem;
+    font-family: 'Raleway', sans-serif;
+}
