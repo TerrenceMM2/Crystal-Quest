@@ -5,16 +5,22 @@ body {
     font-size: 2rem;
     background-color: #222;
     color: #FFF;
+    cursor: default;
 }
 
 h1 {
     font-weight: 900;
 }
 
+.animated.delay-8s {
+    -webkit-animation-delay: 8s;
+    animation-delay: 8s;
+  }
+
 .container {
     height: 100vh;
     margin: auto;
-    padding: 15% 0;
+    padding: 10% 0;
 }
 
 .button {
@@ -22,6 +28,11 @@ h1 {
     width: fit-content;
     margin: 0 auto;
     font-family: 'Raleway', sans-serif;
+    transition: all ease .2s;
+}
+
+.button:hover {
+    transition: all ease .2s;
 }
 
 .crystal {
@@ -48,14 +59,47 @@ h1 {
     animation-delay: 0s !important;
 }
 
-#reset-game, .target, #stats, .credits {
+#reset-game, #target, #stats, .credits, #instructions, #question {
     display: none;
+}
+
+#question {
+    color: #777;
+    font-size: 1.5rem;
+    position: absolute;
+}
+
+#popover {
+    position: relative;
+    z-index: -1;
+    opacity: 0;
+    transition: all ease .3s;
+    margin-left: .5rem;
+}
+
+#question:hover #popover {
+    z-index: 10;
+    opacity: 1;
+    transition: all ease .3s;
+}
+
+.wins {
+    display: inline-block;
 }
 
 #start-game {
     position: fixed;
     top: 50%;
     left: 50%;
+}
+
+#instructions {
+    margin-top: 10rem;
+    color: #8cc2ff;
+}
+
+#warning {
+    color: #ff8c8c;
 }
 
 #reset-game {

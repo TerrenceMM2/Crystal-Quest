@@ -1,10 +1,15 @@
 // HTML element - sorted by DOM order
+var target = document.getElementById("target");
 var goal = document.getElementById("goal");
 var crystalContainer = document.getElementById("crystal-container");
+var crystal = document.getElementsByClassName("crystal");
 var crystal1 = document.getElementById("crystal1");
 var crystal2 = document.getElementById("crystal2");
 var crystal3 = document.getElementById("crystal3");
 var crystal4 = document.getElementById("crystal4");
+var instructions = document.getElementById("instructions")
+var question = document.getElementById("question");
+var stats = document.getElementById("stats");
 var wins = document.getElementById("wins");
 var losses = document.getElementById("losses");
 var message = document.getElementById("message");
@@ -25,44 +30,73 @@ wins.innerHTML = winCount;
 losses.innerHTML = lossCount;
 
 gameStatus(currentGame);
-animateCSS("#start-game", "fadeIn", "delay-3s");
+animateCSS("#start-game", "fadeIn");
 
-document.onclick = function (event) {
+crystalContainer.onclick = function (event) {
     // Makes sure that only the crystal elements and values are passed.
     // Source: https://gomakethings.com/listening-for-click-events-with-vanilla-javascript/
-    console.log(event.target.id);
     if (!event.target.matches('.crystal')) return;
-    animateCSS("#" + event.target.id, "flash", "faster");
+    animateCSS("#" + event.target.id, "flash");
+    animateCSS("#goal", "fadeIn");
     playSound();
     crystalSelection();
     calculateGame(goalNumber);
 }
 
-startGameButton.onclick = function() {
+startGameButton.onclick = function () {
     currentGame = true;
-    for (var i = 0; i < crystalArray.length; i++) {
-        animateCSS("#" + crystalArray[i].id, "fadeInLeft");
-    }
-    gameStatus(currentGame);
-    newGame();
+    startGameButton.classList.remove("delay-3s");
+    animateCSS("#start-game", "fadeOut", function() {
+        hideElement(startGameButton);
+    });
+    instructions.style.display = "block";
+    start = setInterval(startGame, 15000);
 }
 
-resetGameButton.onclick = function() {
+resetGameButton.onclick = function () {
     currentGame = false;
     gameStatus(currentGame);
     resetGame();
 }
 
+function startGame() {
+    animateCSS("#instructions", "fadeOut", function() {
+        instructions.style.display = "none";
+        for (var i = 0; i < crystalArray.length; i++) {
+            animateCSS("#" + crystalArray[i].id, "fadeInLeft");
+        }
+        animateCSS("#target", "fadeIn");
+        animateCSS("#question", "fadeIn");
+        animateCSS("#stats", "fadeIn");
+        target.style.display = "block";
+        question.style.display = "inline-block";
+        stats.style.display = "block";
+        gameStatus(currentGame);
+        newGame();
+        clearInterval(start);
+    });
+}
+
 function calculateGame(num) {
     if (num < 0) {
+        crystalContainer.onclick = function () {
+            return
+        };
+        animateCSS("#message", "fadeIn");
         message.innerHTML = "Sorry. You lose.";
         lossCount++;
+        animateCSS("#losses", "fadeIn");
         losses.innerHTML = lossCount;
     } else if (num === 0) {
+        crystalContainer.onclick = function () {
+            return
+        };
+        animateCSS("#message", "fadeIn");
         message.innerHTML = "Congratulations! You win!";
         winCount++
+        animateCSS("#wins", "fadeIn");
         wins.innerHTML = winCount;
-    }
+    };
 }
 
 function crystalSelection() {
@@ -73,7 +107,7 @@ function crystalSelection() {
     goal.innerHTML = goalNumber;
 }
 
-function gameStatus(boolean){
+function gameStatus(boolean) {
     if (boolean) {
         console.log("current Game Status: " + boolean);
         crystalContainer.style.display = "flex";
@@ -83,8 +117,12 @@ function gameStatus(boolean){
         console.log("current Game Status: " + boolean);
         crystalContainer.style.display = "none";
         resetGameButton.style.display = "none";
-        startGameButton.style.display = "block"
+        startGameButton.style.display = "block";
     }
+};
+
+function hideElement(obj) {
+    obj.style.display = "none";
 };
 
 function newGame() {
@@ -106,6 +144,12 @@ function resetGame() {
     console.log("reset");
     goal.innerHTML = "";
     message.innerHTML = "";
+    message.style.display = "none";
+    stats.style.display = "none";
+    target.style.display = "none";
+    currentGame = true;
+    startGame();
+    newGame();
 }
 
 function playSound() {
@@ -115,8 +159,8 @@ function playSound() {
 }
 
 function animateCSS(element, animationName, callback) {
-    const node = document.querySelector(element);
-    node.classList.add('animated', animationName, callback)
+    const node = document.querySelector(element)
+    node.classList.add('animated', animationName)
 
     function handleAnimationEnd() {
         node.classList.remove('animated', animationName)
