@@ -1,5 +1,5 @@
 # crystal-game
-Vanderbilt Coding Boot Camp - Crystal Game
+Vanderbilt Coding Boot Camp - Crystal Game  
 Live Link: https://terrencemm2.github.io/crystal-game/  
   
 ## Instructions  
