@@ -32,7 +32,7 @@ losses.innerHTML = lossCount;
 gameStatus(currentGame);
 animateCSS("#start-game", "fadeIn");
 
-crystalContainer.onclick = function (event) {
+crystalContainer.addEventListener("click", function(event) {
     // Makes sure that only the crystal elements and values are passed.
     // Source: https://gomakethings.com/listening-for-click-events-with-vanilla-javascript/
     if (!event.target.matches('.crystal')) return;
@@ -41,91 +41,53 @@ crystalContainer.onclick = function (event) {
     playSound();
     crystalSelection();
     calculateGame(goalNumber);
-}
+});
 
-startGameButton.onclick = function () {
+startGameButton.addEventListener("click", function () {
     currentGame = true;
     startGameButton.classList.remove("delay-3s");
-    animateCSS("#start-game", "fadeOut", function() {
-        hideElement(startGameButton);
+    animateCSS("#start-game", "fadeOut", function () {
+        startGameButton.style.display = "none";
     });
     instructions.style.display = "block";
     start = setInterval(startGame, 15000);
-}
+});
 
-resetGameButton.onclick = function () {
-    currentGame = false;
+resetGameButton.addEventListener("click", function () {
     gameStatus(currentGame);
     resetGame();
-}
+});
 
+// Use to reset and show the correct elements.
 function startGame() {
-    animateCSS("#instructions", "fadeOut", function() {
-        instructions.style.display = "none";
+    newNumbers();
+    // To accommodate a new game.
+    if (instructions.style.display === "block") {
+        animateCSS("#instructions", "fadeOut", function () {
+            instructions.style.display = "none";
+            for (var i = 0; i < crystalArray.length; i++) {
+                animateCSS("#" + crystalArray[i].id, "fadeInLeft");
+            }
+            target.style.display = "block";
+            question.style.display = "inline-block";
+            stats.style.display = "block";
+            gameStatus(currentGame);
+        });
+    // To accommodate a reset game.
+    } else {
         for (var i = 0; i < crystalArray.length; i++) {
             animateCSS("#" + crystalArray[i].id, "fadeInLeft");
         }
-        animateCSS("#target", "fadeIn");
-        animateCSS("#question", "fadeIn");
-        animateCSS("#stats", "fadeIn");
         target.style.display = "block";
         question.style.display = "inline-block";
         stats.style.display = "block";
         gameStatus(currentGame);
-        newGame();
-        clearInterval(start);
-    });
-}
-
-function calculateGame(num) {
-    if (num < 0) {
-        crystalContainer.onclick = function () {
-            return
-        };
-        animateCSS("#message", "fadeIn");
-        message.innerHTML = "Sorry. You lose.";
-        lossCount++;
-        animateCSS("#losses", "fadeIn");
-        losses.innerHTML = lossCount;
-    } else if (num === 0) {
-        crystalContainer.onclick = function () {
-            return
-        };
-        animateCSS("#message", "fadeIn");
-        message.innerHTML = "Congratulations! You win!";
-        winCount++
-        animateCSS("#wins", "fadeIn");
-        wins.innerHTML = winCount;
     };
-}
-
-function crystalSelection() {
-    if (goalNumber <= 0) return;
-    var crystalValue = parseInt(event.target.dataset.value);
-    console.log(crystalValue);
-    goalNumber -= crystalValue;
-    goal.innerHTML = goalNumber;
-}
-
-function gameStatus(boolean) {
-    if (boolean) {
-        console.log("current Game Status: " + boolean);
-        crystalContainer.style.display = "flex";
-        resetGameButton.style.display = "block";
-        startGameButton.style.display = "none";
-    } else {
-        console.log("current Game Status: " + boolean);
-        crystalContainer.style.display = "none";
-        resetGameButton.style.display = "none";
-        startGameButton.style.display = "block";
-    }
+    clearInterval(start);
 };
 
-function hideElement(obj) {
-    obj.style.display = "none";
-};
-
-function newGame() {
+// Will generate new values for each crystal and the target number.
+function newNumbers() {
     index = 0;
     goalNumber = Math.floor(Math.random() * (150 - 50) + 50);
     crystalArrayNumbers = [];
@@ -140,24 +102,73 @@ function newGame() {
     };
 };
 
+// Will reset the displayed text and the elements shown.
 function resetGame() {
-    console.log("reset");
     goal.innerHTML = "";
     message.innerHTML = "";
     message.style.display = "none";
     stats.style.display = "none";
     target.style.display = "none";
+    question.style.display = "none";
+    crystalContainer.style.display = "none";
     currentGame = true;
     startGame();
-    newGame();
-}
+};
 
+// Use to calculate a winning or losing game.
+function calculateGame(num) {
+    if (num < 0) {
+        // Used stop the user from click the crystals after the game has ended.
+        crystalContainer.addEventListener("click", function () {
+            return
+        });
+        animateCSS("#message", "fadeIn");
+        message.innerHTML = "Sorry. You lose.";
+        lossCount++;
+        animateCSS("#losses", "fadeIn");
+        losses.innerHTML = lossCount;
+    } else if (num === 0) {
+        crystalContainer.addEventListener("click", function () {
+            return
+        });
+        animateCSS("#message", "fadeIn");
+        message.innerHTML = "Congratulations! You win!";
+        winCount++
+        animateCSS("#wins", "fadeIn");
+        wins.innerHTML = winCount;
+    };
+};
+
+// Used to subtract the selected crystal value from the goal number.
+// If the game is over, the function will stop to keep the number from going down.
+function crystalSelection() {
+    if (goalNumber <= 0) return;
+    var crystalValue = parseInt(event.target.dataset.value);
+    goalNumber -= crystalValue;
+    goal.innerHTML = goalNumber;
+};
+
+// Check the status of the game to display the correct elements.
+function gameStatus(boolean) {
+    if (boolean) {
+        crystalContainer.style.display = "flex";
+        resetGameButton.style.display = "block";
+        startGameButton.style.display = "none";
+    } else {
+        crystalContainer.style.display = "none";
+        resetGameButton.style.display = "none";
+        startGameButton.style.display = "block";
+    }
+};
+
+// Plays a sound on each crystal click.
 function playSound() {
     var audio = document.getElementById("gem-sound");
     audio.currentTime = 0;
     audio.play();
-}
+};
 
+// Function borrowed from https://github.com/daneden/animate.css#usage-with-javascript
 function animateCSS(element, animationName, callback) {
     const node = document.querySelector(element)
     node.classList.add('animated', animationName)
@@ -170,4 +181,4 @@ function animateCSS(element, animationName, callback) {
     }
 
     node.addEventListener('animationend', handleAnimationEnd)
-}
+};
