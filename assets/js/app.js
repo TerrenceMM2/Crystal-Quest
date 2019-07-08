@@ -15,6 +15,7 @@ var losses = document.getElementById("losses");
 var message = document.getElementById("message");
 var startGameButton = document.getElementById("start-game");
 var resetGameButton = document.getElementById("reset-game");
+var musicBed = document.getElementById("music-bed");
 
 var crystalArrayNumbers = [];
 var crystalArray = [crystal1, crystal2, crystal3, crystal4];
@@ -36,11 +37,11 @@ crystalContainer.addEventListener("click", function(event) {
     // Makes sure that only the crystal elements and values are passed.
     // Source: https://gomakethings.com/listening-for-click-events-with-vanilla-javascript/
     if (!event.target.matches('.crystal')) return;
+    if (goalNumber <= 0) return;
+    crystalSelection();
     animateCSS("#" + event.target.id, "flash");
     animateCSS("#goal", "fadeIn");
     playSound();
-    crystalSelection();
-    calculateGame(goalNumber);
 });
 
 startGameButton.addEventListener("click", function () {
@@ -51,6 +52,7 @@ startGameButton.addEventListener("click", function () {
     });
     instructions.style.display = "block";
     start = setInterval(startGame, 15000);
+    musicBed.play();
 });
 
 resetGameButton.addEventListener("click", function () {
@@ -106,7 +108,6 @@ function newNumbers() {
 function resetGame() {
     goal.innerHTML = "";
     message.innerHTML = "";
-    message.style.display = "none";
     stats.style.display = "none";
     target.style.display = "none";
     question.style.display = "none";
@@ -142,10 +143,10 @@ function calculateGame(num) {
 // Used to subtract the selected crystal value from the goal number.
 // If the game is over, the function will stop to keep the number from going down.
 function crystalSelection() {
-    if (goalNumber <= 0) return;
     var crystalValue = parseInt(event.target.dataset.value);
     goalNumber -= crystalValue;
     goal.innerHTML = goalNumber;
+    calculateGame(goalNumber);
 };
 
 // Check the status of the game to display the correct elements.
