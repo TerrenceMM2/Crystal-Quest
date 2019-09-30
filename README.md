@@ -10,6 +10,10 @@ Live Link: https://terrencemm2.github.io/crystal-game/
 4. After each round, click "Reset" in order to generate a new game.  
    * Each new round generates a new "To Target" number and a new set of crystal values.  
 
+
+## Screenshot
+![Crystal Quest Screenshot](../media/crystal-quest-screenshot.png?raw=true)
+
 ### Credits
 * [Skeleton](http://getskeleton.com/)  
 * [Animate.css](https://daneden.github.io/animate.css/)  
