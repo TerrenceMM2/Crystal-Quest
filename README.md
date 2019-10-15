@@ -1,5 +1,5 @@
 # Crystal Quest
-Live Link: https://terrencemm2.github.io/crystal-game/  
+Live Link: https://terrencemm2.github.io/Crystal-Quest/  
   
 ## Instructions  
 1. Click "Start" to read the game instructions and begin the game.  
